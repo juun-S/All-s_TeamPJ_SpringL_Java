@@ -56,6 +56,38 @@
 * **OAuth2 SNS 로그인(NAVER)**
 * **USER 관련 CRUD/ 현재 상태 표시**
 
-* 
+* Spring Security / OAuth2 SNS 로그인(NAVER)
+  
+```mermaid
+  graph LR
+    subgraph Spring Security
+        사용자 --> UsernamePasswordAuthenticationFilter["UsernamePasswordAuthenticationFilter"]
+        UsernamePasswordAuthenticationFilter --> AuthenticationManager["AuthenticationManager"]
+        AuthenticationManager --> UserDetailsService["UserDetailsService<br/>(UsersUserDetailsService)"]
+        UserDetailsService --> UsersMapper["UsersMapper"]
+        UsersMapper --> Database["Database"]
+        AuthenticationManager --> 세션["세션<br/>(사용자 정보 저장)"]
+        FilterSecurityInterceptor["FilterSecurityInterceptor"] --> AccessDecisionManager["AccessDecisionManager"]
+        AccessDecisionManager --> SecurityMetadataSource["SecurityMetadataSource<br/>(URL 패턴, 권한 정보)"]
+    end
+
+    subgraph Naver 소셜 로그인
+        사용자 --> NaverLoginController["NaverLoginController"]
+        NaverLoginController --> Naver["Naver<br/>(인증 페이지)"]
+        Naver -- 인증 코드 --> NaverLoginController
+        NaverLoginController --> NaverLoginService["NaverLoginService"]
+        NaverLoginService --> Naver["Naver<br/>(API)"]
+        Naver -- 사용자 정보 --> NaverLoginService
+        NaverLoginService --> NaverLoginController
+        NaverLoginController --> 로그인{"로그인<br/>(기존 사용자)"}
+        NaverLoginController --> 회원가입{"회원가입<br/>(신규 사용자)"}
+        CustomLogoutSuccessHandler["CustomLogoutSuccessHandler"] --> Naver
+    end
+
+    세션 --> CustomLogoutSuccessHandler
+    CustomLogoutSuccessHandler --> UsersMapper
+```
+
+---
 
 **함께 성장하고 싶다면 All's에서 만나요!** 
