@@ -12,7 +12,8 @@
 **프로젝트 소개 PPT**
 </br>
 
-[https://docs.google.com/presentation/d/1cOqBt7Q-brvM0ZSnj2pWdIbkFZJLOrpc5wMQAlUnAPk/preview?slide=id.p1](https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKkXXY/edit#slide=id.p1)
+https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKkXXY/pub?start=false&loop=true&delayms=10000
+
 
 **주요 기능**
 
