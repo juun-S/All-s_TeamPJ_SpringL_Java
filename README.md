@@ -157,6 +157,69 @@
 *   **검색 기능**: 카페 검색 기능을 통해 사용자가 스터디 장소 주변의 카페를 쉽게 찾을 수 있도록 지원합니다.
 *   **지도 확대/축소 및 이동**: 사용자가 지도를 확대/축소하거나 특정 위치로 이동할 수 있는 기능을 제공합니다.
 
+### 지도 기능을 사용한 대표 예(스터디 모집 페이지)
+
+**스터디 모집 페이지 (`/studyRecruit/recruitList`)**
+
+1.  **스터디 위치 시각화**
+    *   지도에 스터디 위치를 마커로 표시하여 사용자가 스터디 장소를 한눈에 파악할 수 있도록 돕습니다.
+    *   마커를 클릭하면 스터디 제목, 카테고리, 좋아요 수, 모집 인원 등의 정보를 요약하여 보여주는 인포윈도우를 제공합니다.
+2.  **주변 카페 검색**
+    *   사용자의 현재 위치 또는 지도에서 선택한 위치(마커)를 기준으로 주변 카페를 검색하여 지도에 표시합니다.
+    *   카페 마커를 클릭하면 카페 이름, 주소, 전화번호, 상세 정보 링크를 포함하는 인포윈도우를 표시합니다.
+3.  **내 주변 스터디 보기**
+    *   사용자의 현재 위치를 기준으로 가까운 스터디 3개를 리스트 형태로 보여줍니다.
+    *   스터디 제목, 카테고리, 모집 상태, 좋아요 버튼 등의 정보를 제공하여 사용자가 관심 있는 스터디를 빠르게 찾을 수 있도록 돕습니다.
+
+*이 다이어그램은 스터디 모집 페이지에서 카카오 지도 API를 활용하는 주요 서비스 로직의 흐름을 시각적으로 보여줍니다. 페이지 로드 시 동작과 사용자 인터랙션에 따른 동작을 구분하여 나타내었으며, 관련된 백엔드 엔드포인트도 함께 표시하였습니다.*
+
+```mermaid
+graph LR
+    subgraph 페이지 로드
+        사용자 --> 페이지로드["페이지 로드"]
+        페이지로드 --> 지도초기화["지도 초기화<br/>(initializeMapRecruitList)"]
+        페이지로드 --> 위치정보가져오기["사용자 위치 정보 가져오기<br/>(navigator.geolocation.getCurrentPosition)"]
+        위치정보가져오기 --> 위치정보전송["위치 정보 서버 전송<br/>(sendLocationToServer)"]
+        위치정보가져오기 --> 지도중심설정["지도 중심 설정"]
+        페이지로드 --> 스터디목록조회["스터디 목록 조회<br/>(AJAX)"]
+        스터디목록조회 --> 스터디마커표시["스터디 마커 표시<br/>(displayStudyMarkers)"]
+        스터디목록조회 --> 가까운스터디표시["가까운 스터디 표시<br/>(getStudyListAndDisplayList)"]
+    end
+
+    subgraph 사용자 인터랙션
+        사용자 --> 지도클릭["지도 클릭"]
+        지도클릭 --> 주소좌표변환["주소-좌표 변환<br/>(geocoder.coord2Address)"]
+        주소좌표변환 --> 마커생성["마커 생성"]
+        주소좌표변환 --> 인포윈도우생성["인포윈도우 생성"]
+        사용자 --> 마커클릭["마커 클릭"]
+        마커클릭 --> 인포윈도우표시["인포윈도우 표시"]
+        사용자 --> 주변카페검색["주변 카페 검색 버튼 클릭"]
+        주변카페검색 --> 카페검색["카페 검색<br/>(searchCafesNearMapCenter/<br/>searchCafesNearMapMarkerCenter)"]
+        카페검색 --> 카페마커표시["카페 마커 표시<br/>(displayCafeMarkers)"]
+        사용자 --> 내위치이동["내 위치로 가기 버튼 클릭"]
+        내위치이동 --> 위치정보가져오기
+        내위치이동 --> 지도중심설정
+        사용자 --> 지도확대축소["지도 확대/축소 버튼 클릭"]
+        지도확대축소 --> toggleMapView["toggleMapView"]
+    end
+```
+
+**설명**
+
+*   **페이지 로드**: 페이지 로드 시 지도를 초기화하고, 사용자 위치 정보를 가져와 지도 중심을 설정하고 서버에 전송합니다. 또한, 스터디 목록을 조회하여 지도에 마커로 표시하고 가까운 스터디 목록을 화면에 표시합니다.
+*   **사용자 인터랙션**: 
+    *   지도 클릭: 클릭한 위치에 마커를 생성하고, 해당 위치의 주소를 인포윈도우에 표시합니다.
+    *   마커 클릭: 해당 마커에 대한 상세 정보를 인포윈도우에 표시합니다.
+    *   주변 카페 검색 버튼 클릭: 사용자 위치 또는 마커 위치를 기준으로 주변 카페를 검색하고 지도에 표시합니다.
+    *   내 위치로 가기 버튼 클릭: 지도 중심을 사용자의 현재 위치로 이동시킵니다.
+    *   지도 확대/축소 버튼 클릭: `toggleMapView` 함수를 호출하여 지도를 확대하거나 축소합니다.
+
+**백엔드 연동**
+
+*   `/studies/nearestStudies`: 사용자 위치를 기반으로 가까운 스터디 목록을 조회하는 AJAX 요청을 처리합니다. (`StudiesMapController`)
+*   `/studies/listOnMap`: 전체 스터디 목록을 조회하는 AJAX 요청을 처리합니다. (`StudiesMapController`)
+*   `/Users/updateLocation`: 사용자의 위치 정보를 업데이트하는 AJAX 요청을 처리합니다. (`UsersController`)
+
 ## 사용자 CRUD 기능
 
 ### 1. 회원가입 및 로그인
@@ -185,6 +248,48 @@
     * 로그인 성공 시 `AuthenticationManager`를 통해 사용자를 인증하고, 세션을 생성하여 사용자 정보를 저장합니다.
     * `UserDetailsService`를 구현한 `UsersUserDetailsService`를 통해 데이터베이스에서 사용자 정보를 조회하여 인증에 활용합니다.
     * 로그아웃 시 `CustomLogoutSuccessHandler`를 통해 소셜 로그인 연동 해제 및 사용자 활동 상태를 업데이트합니다.
+```mermaid
+graph LR
+    subgraph 사용자_액션["사용자 액션"]
+        회원가입["회원가입"]
+        로그인["로그인"]
+        정보조회["정보 조회"]
+        정보수정["정보 수정"]
+        이미지수정["이미지 수정"]
+        회원탈퇴["회원 탈퇴"]
+    end
+
+    subgraph UsersController
+        회원가입 --> usersRegister
+        로그인 --> usersLogin
+        정보조회 --> userInfoProcess & userInfo
+        정보수정 --> usersUpdate
+        이미지수정 --> memberImageUpdate
+        회원탈퇴 --> deleteAccount
+    end
+
+    subgraph UsersMapper
+        usersRegister --> insertUser & insertUserAuthority
+        usersLogin & userInfo & userInfoProcess & UserDetailsService --> findByUsername
+        usersUpdate & memberImageUpdate --> updateUser
+        deleteAccount --> deleteUserAccountQueries["deleteUserByUsername, deleteUserAuthorities, deleteUserCalendars, ..."] 
+    end
+
+    subgraph Spring_Security["Spring Security"]
+        로그인 --> AuthenticationManager
+        AuthenticationManager --> UserDetailsService
+        UserDetailsService --> UsersMapper
+        로그아웃["로그아웃"] --> CustomLogoutSuccessHandler
+        CustomLogoutSuccessHandler --> NaverLoginService & KakaoLoginService & GoogleLoginService & UsersMapper
+    end
+
+    subgraph 외부_서비스["외부 서비스"]
+        CustomLogoutSuccessHandler --> Naver & Kakao & Google
+    end
+
+    Database["Database"]
+```
+---
 
 ## 스터디 멤버 활동 상태 실시간 업데이트
 
@@ -230,4 +335,30 @@
 5.  **멤버 상태 업데이트**: 응답받은 멤버 상태 정보를 이용하여 각 멤버의 활동 상태 표시를 업데이트합니다.
 6.  **Swiper 객체 업데이트**: `memberswiper.update()`를 호출하여 변경된 멤버 상태를 Swiper 슬라이더에 반영합니다.
 
+```mermaid
+graph LR
+    subgraph 페이지 로드
+        사용자 --> 페이지_로드["페이지 로드"]
+        페이지_로드 --> 스터디_목록_조회["스터디 목록 조회<br>(AJAX /studies/getMyStudies)"]
+        스터디_목록_조회 --> 멤버_정보_표시["멤버 정보 표시<br>(displayMyStudies)"]
+        페이지_로드 --> 상태_업데이트_주기적_실행["setInterval(updateStudyMemberStatus, 20000)"]
+    end
 
+    subgraph 멤버_상태_업데이트["멤버 상태 업데이트 (updateStudyMemberStatus)"]
+        상태_업데이트_주기적_실행 --> 스터디_목록_조회
+        스터디_목록_조회 --> 각_스터디_멤버_상태_조회["각 스터디 멤버 상태 조회<br>(AJAX /studyGroup/studyGroupMain/members/{studyIdx})"]
+        각_스터디_멤버_상태_조회 --> 멤버_상태_업데이트_화면["멤버 상태 업데이트<br>및 Swiper 갱신"]
+    end
+
+    subgraph 서버_측_처리
+        스터디_목록_조회 --> StudiesMapController["StudiesMapController"]
+        StudiesMapController --> StudyGroupMapper["StudyGroupMapper"]
+        각_스터디_멤버_상태_조회 --> StudyGroupController["StudyGroupController"]
+        StudyGroupController --> StudyService["StudyService"]
+        StudyService --> StudyGroupMapper & UsersMapper["UsersMapper"]
+    end
+
+    Database["Database"]
+```
+
+---
