@@ -2,6 +2,18 @@
 
 **All's**는 사용자들이 스터디 그룹을 형성하고 학습 자료를 공유하며 함께 성장할 수 있는 플랫폼입니다. 다양한 학습 관리, 정보 제공, 취업 지원 기능을 통합하여 학습자가 효율적으로 자기계발과 목표 달성에 집중할 수 있도록 돕는 포괄적인 스터디 플랫폼을 제공합니다.
 
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/d0e52a9f-9ddb-400c-b259-d359d293e86a" alt="aaaaaaaaaaa" width="450">
+
+<img src="https://github.com/user-attachments/assets/bc1f14d6-62f7-468f-befd-2c4c7373936b" alt="image" width="450">
+</div>
+
+**프로젝트 소개 PPT**
+</br>
+
+https://docs.google.com/presentation/d/1cOqBt7Q-brvM0ZSnj2pWdIbkFZJLOrpc5wMQAlUnAPk/preview?slide=id.p1
+
 **주요 기능**
 
 * **스터디 모집 및 관리**
