@@ -50,6 +50,12 @@
     * FullCalendar
     * Chart.js
 
+**본인 담당**
+* **세션 방식 SPRING SECURITY**
+* **페이지 별 커스텀 위치/지도 기반 서비스 Kakao Map API**
+* **OAuth2 SNS 로그인(NAVER)**
+* **USER 관련 CRUD/ 현재 상태 표시**
 
+* 
 
 **함께 성장하고 싶다면 All's에서 만나요!** 
