@@ -42,13 +42,31 @@
     * Spring MVC
     * MyBatis
     * Spring Security
+    * Lombok
+    * HikariCP
+    * OAuth2
+    * 네이버 OAuth API
+    * 카카오 OAuth API
+    * 구글 OAuth API
+    * Apache Commons FileUpload
+    * Apache Tomcat
+    * MySQL
+    * Maven
+    * Log4j
+    * jackson, gson
+      
 * **Front-end**
     * HTML, CSS, JavaScript
+    * jsp
     * jQuery
+    * AJAX
+    * JSTL
     * Bootstrap
+    * Swiper
     * Kakao Maps API
     * FullCalendar
     * Chart.js
+    
 
 **본인 담당** 
    </br>
