@@ -1,5 +1,9 @@
 ## All's - 함께 성장하는 스터디 플랫폼
 
+<a href="https://hits.seeyoufarm.com">
+    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjuun-S%2FAll-s_TeamPJ_SpringL_Java&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="Hit Counter for All's_TeamPJ_SpringL_Java"/>
+</a>
+
 **All's**는 사용자들이 위치를 기반으로 스터디 그룹을 형성하고 학습 자료를 공유하며 함께 성장할 수 있는 플랫폼입니다. 다양한 학습 관리, 정보 제공, 취업 지원 기능을 통합하여 학습자가 효율적으로 자기계발과 목표 달성에 집중할 수 있도록 돕는 포괄적인 스터디 플랫폼을 제공합니다.
 
 
