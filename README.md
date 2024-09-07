@@ -82,7 +82,8 @@ https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKk
     * FullCalendar
     * Chart.js
 
-<img src='https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white'/>
+* **개발환경 / 협업**
+* <img src='https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white'/> <img src='https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white'/> <img src='https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white'/> <img src='https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white'/>
 
 **본인 담당** 
    </br>
