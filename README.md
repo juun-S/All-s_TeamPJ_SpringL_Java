@@ -52,6 +52,7 @@ https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKk
 **기술 스택**
 
 * **Back-end**
+* <img src='https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white'/>  <img src='https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white'/>  <img src="https://img.shields.io/badge/spring%20security-%236DB33F.svg?style=for-the-badge&logo=springsecurity&logoColor=white" alt="Spring Security"> <img src='https://img.shields.io/badge/mybatis-%23c3002f.svg?style=for-the-badge&logo=mybatis&logoColor=white' alt='MyBatis'/> <img src="https://img.shields.io/badge/OAuth2-%2320232a.svg?style=for-the-badge&logo=oauth&logoColor=white" alt="OAuth2"> <img src="https://img.shields.io/badge/Naver%20OAuth-%2303C75A.svg?style=for-the-badge&logo=naver&logoColor=white" alt="Naver OAuth API"> <img src="https://img.shields.io/badge/Kakao%20OAuth-%23FEE500.svg?style=for-the-badge&logo=kakao&logoColor=black" alt="Kakao OAuth API"> <img src="https://img.shields.io/badge/Google%20OAuth-%234285F4.svg?style=for-the-badge&logo=google&logoColor=white" alt="Google OAuth API"> <img src='https://img.shields.io/badge/Apache%20Tomcat-%23F8DC75.svg?style=for-the-badge&logo=apache-tomcat&logoColor=black'/> <img src='https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white'/> <img src='https://img.shields.io/badge/maven-C71A36?style=for-the-badge&logo=apache%20maven&logoColor=white'/> <img src='https://img.shields.io/badge/log4j-%23C71329.svg?style=for-the-badge&logo=apache&logoColor=white'/> <img src='https://img.shields.io/badge/jackson-%23dff0d8.svg?style=for-the-badge&logo=json&logoColor=black'/> <img src='https://img.shields.io/badge/gson-%23323330.svg?style=for-the-badge&logo=google&logoColor=white'/>  <img src='https://img.shields.io/badge/HikariCP-%234D6B9C.svg?style=for-the-badge&logo=java&logoColor=white' alt='HikariCP'/>
     * Spring MVC
     * MyBatis
     * Spring Security
@@ -69,6 +70,7 @@ https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKk
     * jackson, gson
       
 * **Front-end**
+* <img src='https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white'/> <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"> <img src='https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E'/> <img src='https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white'/>  <img src="https://img.shields.io/badge/AJAX-lightgrey?style=for-the-badge&logo=javascript&logoColor=black" alt="AJAX"> <img src="https://img.shields.io/badge/JSTL-lightgrey?style=for-the-badge&logo=java&logoColor=black" alt="JSTL"> <img src='https://img.shields.io/badge/JSP-lightgrey?style=for-the-badge&logo=java&logoColor=black' alt='JSP'/> <img src="https://img.shields.io/badge/Bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap"> <img src="https://img.shields.io/badge/Swiper-%2300BBFF.svg?style=for-the-badge&logo=swiper&logoColor=white" alt="Swiper"> <img src="https://img.shields.io/badge/Kakao%20Maps%20API-%23FEE500.svg?style=for-the-badge&logo=kakao&logoColor=black" alt="Kakao Maps API"> <img src="https://img.shields.io/badge/FullCalendar-%23F7B93E.svg?style=for-the-badge&logo=fullcalendar&logoColor=black" alt="FullCalendar"> <img src="https://img.shields.io/badge/Chart.js-%23FF6384.svg?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js">
     * HTML, CSS, JavaScript
     * jsp
     * jQuery
@@ -79,7 +81,8 @@ https://docs.google.com/presentation/d/1XK1DXK268ZQPuaJLk2a87NMpGAmBUac0128GzvKk
     * Kakao Maps API
     * FullCalendar
     * Chart.js
-    
+
+<img src='https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white'/>
 
 **본인 담당** 
    </br>
