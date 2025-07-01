@@ -47,6 +47,7 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
 
       - name: Polaris Scan
+        uses: actions/checkout@v4
         with:
           ### ---------- POLARIS SCANNING: REQUIRED FIELDS ----------
           polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
