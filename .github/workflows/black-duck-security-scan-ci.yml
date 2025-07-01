@@ -48,8 +48,8 @@ jobs:
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_assessment_types: "SCA,SAST"
 
-          ### ---------- SRM SCANNING: REQUIRED FIELDS ----------
-          srm_url: ${{ vars.SRM_URL }}
-          srm_apikey: ${{ secrets.SRM_API_KEY }}
-          srm_assessment_types: "SCA,SAST"
+          # ### ---------- SRM SCANNING: REQUIRED FIELDS ----------
+          # srm_url: ${{ vars.SRM_URL }}
+          # srm_apikey: ${{ secrets.SRM_API_KEY }}
+          # srm_assessment_types: "SCA,SAST"
 
