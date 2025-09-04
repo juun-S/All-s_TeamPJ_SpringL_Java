@@ -1,0 +1,65 @@
+# Coverity configuration file.
+# The schema is available here: <install-dir>/doc/configuration-schema.json
+# For help on individual settings:      coverity help config --setting <setting>
+# For a complete example configuration: coverity help config --show-all
+# For help on configuration syntax:     coverity help config --syntax
+
+capture: # 코드 캡쳐 단계 설정
+  build-command-inference: true # 빌드 명령어 자동 유추
+  emit-complementary-info: false 
+  encoding: UTF-8
+  failure-threshold-percent: 0 # 실패 임계값 설정
+  force-dependency-resolution: false # 의존성 강제 해결
+  minimal-classpath-emit: false 
+  record-with-source: false # 소스 코드와 함께 기록
+  security-da: true # 보안 분석 활성화
+  build: # 빌드 설정
+    build-command: mvn package # 빌드 명령어 (Maven)
+    clean-command: mvn clean # 클린 명령어 (Maven)
+    scan-transparency: true # 스캔 투명성
+    defer-decomp: false
+    instrument: false 
+    aspnet-compiler: false 
+    bazel: false
+  languages: # 언어 설정
+    include:
+      - java # Java 언어 분석
+  compiler-configuration: # 컴파일러 설정
+    cov-configure:
+      - [--java]
+
+analyze: # 분석 단계 설정
+  aggressiveness-level: low # 분석 강도 (낮음)
+  c-cpp-fnptr: false
+  c-cpp-virtual: false
+  callgraph-metrics: false # 콜 그래프 메트릭
+  constraint-fpp: false
+  location: local # 분석 위치 (로컬)
+  mode: pfi 
+  one-tu-per-psf: true
+  scan-transparency: true # 스캔 투명성
+  checkers: # 체커 설정
+    all: false # 모든 체커 비활성화
+    all-security: true # 모든 보안 체커 활성화
+    android-security: true # 안드로이드 보안 체커 활성화
+    webapp-security: # 웹 애플리케이션 보안 체커 설정
+      aggressiveness-level: low # 분석 강도 (낮음)
+      enabled: true # 활성화
+    audit: false # 감사 체커 비활성화
+    brakeman: false
+    c-family-security: false
+    concurrency: false # 동시성 체커 비활성화
+    default: true # 기본 체커 활성화
+    pmd: false
+    rule: false
+
+# Specifies where the analysis results should be sent.
+commit: # 결과 전송 설정
+
+  connect: 
+
+    # The name of the stream to commit the results to.
+    stream: All-s_TeamPJ_SpringL_Java_1 # 스트림 이름
+
+    # Absolute URL of where to commit the Coverity Connect results.
+    url: ${{ vars.COVERITY_URL }}:443

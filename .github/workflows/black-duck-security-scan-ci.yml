@@ -1,0 +1,141 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# Black Duck Security Action allows you to integrate Static Analysis Security Testing (SAST) and Software Composition Analysis (SCA) into your CI/CD pipelines.
+# For more information about configuring your workflow,
+# read our documentation at https://github.com/blackduck-inc/black-duck-security-scan
+
+name: CI Black Duck security scan
+
+on:
+  push:
+    branches: [ "middle_main" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "middle_main" ]
+  schedule:
+    - cron: '38 20 */7 * *'
+#분: 38 → 매시 38분, 시간: 20 → 오후 8시에, 월, 일: * → 매일 매월, 요일: 2 → 요일 필드 기준 화요일 (0=일요일, …)
+#따라서 결과적으로 매주 화요일 20:38에 실행됨
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Black Duck SCA scan
+        uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
+        env:
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        with:
+          ### ---------- BLACKDUCK SCA SCANNING: REQUIRED FIELDS ----------
+          blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+          detect_search_depth: 10
+          blackducksca_scan_full: true
+          blackducksca_waitForScan: true #분석 완료까지 대
+          detect_args: '--detect.excluded.detector.types=GIT --detect.project.version.name=ScheduledGithubAction'
+          ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
+          blackducksca_fixpr_enabled: true
+          blackducksca_fixpr_maxCount: 5
+          blackducksca_fixpr_filter_severities: 'CRITICAL,HIGH'
+          blackducksca_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackducksca_fixpr_enabled is set to 'true'
+                    ### Mark build status if policy violating issues are found
+          mark_build_status: 'success'
+  
+          ## To enable Black Duck SCA policy badges
+          blackducksca_policy_badges_create: true
+          blackducksca_policy_badges_maxCount: 5
+  
+          project_directory: ${{ vars.PROJECT_DIRECTORY }}
+  
+          ## Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          include_diagnostics: true
+  
+      - name: Black Duck SCA PR Scan
+        id: black-duck-pr-scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: blackduck-inc/black-duck-security-scan@v2
+  
+        ### Use below configuration to set specific detect environment variables
+        env:
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        with:
+          blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+          blackducksca_scan_full: false
+  
+          ### Below configuration is used to enable automatic pull request comment based on Black Duck SCA scan result
+          blackducksca_prComment_enabled: true
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          # Mandatory when blackducksca_automation_prcomment is set to 'true'
+  
+          ## To enable Black Duck SCA policy badges
+          blackducksca_policy_badges_create: true
+          blackducksca_policy_badges_maxCount: 5
+  
+          project_directory: ${{ vars.PROJECT_DIRECTORY }}
+  
+          ## Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          include_diagnostics: true
+  
+          ## Mark build status if policy violating issues are found
+          mark_build_status: 'success'
+  
+      # ## Uncomment below configuration to add custom logic based on return status
+      # - name: cmdLine
+      #   id: cmdLine
+      #   run: |
+      #     EXIT_CODE=${{ steps.black-duck-full-scan.outputs.status }}
+      #     echo "Black Duck Full Scan exit status - $EXIT_CODE"  
+          
+          # ### ---------- COVERITY SCANNING: REQUIRED FIELDS ----------
+          # coverity_url: ${{ vars.COVERITY_URL }}
+          # coverity_user: ${{ secrets.COVERITY_USER }}
+          # coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+
+      - name: Polaris Scan
+        uses: actions/checkout@v4
+        with:
+          ### ---------- POLARIS SCANNING: REQUIRED FIELDS ----------
+          polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_assessment_types: "SCA,SAST"
+          polaris.onboarding: false
+          polaris_test_sca_type: "SCA-SIGNATURE"
+          ### SCANNING: Optional fields
+          polaris_application_name: SoftFlow_Demo
+          polaris_project_name: All-s_TeamPJ_SpringL_Java
+          ### SARIF report parameters
+          polaris_reports_sarif_create: true
+          polaris_upload_sarif_report: true
+          ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
+          polaris_reports_sarif_file_path: '/Test/Polaris/Report/report.sarif.json' # File path (including file name) where SARIF report is created.
+          polaris_reports_sarif_severities: "CRITICAL,HIGH"
+          polaris_reports_sarif_groupSCAIssues: true 
+          polaris_reports_sarif_issue_types: 'SCA, SAST' 
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
+          ### Uncomment below to add arbitrary CL parameters
+          detect_search_depth: 2
+          detect_args: '--detect.diagnostic=true --detect.excluded.detector.types=GIT'
+          coverity_build_command: mvn clean install
+          coverity_clean_command: mvn clean
+          coverity_config_path: /Test/Coverity/Config/coverity.yml
+          coverity_args: --config-override capture.build.build-command=mvn install
+
+          
+
+          # ### ---------- SRM SCANNING: REQUIRED FIELDS ----------
+          # srm_url: ${{ vars.SRM_URL }}
+          # srm_apikey: ${{ secrets.SRM_API_KEY }}
+          # srm_assessment_types: "SCA,SAST"
+

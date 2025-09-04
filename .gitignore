@@ -81,3 +81,7 @@ src/main/resources/db.properties
 src/main/webapp/resources/db.properties
 src/main/resources/application.properties
 src/main/webapp/resources/application.properties
+
+# configuration files
+*.env
+*.application.properties
