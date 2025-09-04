@@ -269,7 +269,7 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.7</version>
 		</dependency>
-
+    
 		<dependency>
 			<!-- 공급망 보안 테스트 용 CVE-2021-44228 (Log4Shell) 취약점이 있는 버전 -->
 			<groupId>org.apache.logging.log4j</groupId>
@@ -296,7 +296,6 @@
 			<artifactId>struts2-core</artifactId>
 			<version>2.3.31</version>
 		</dependency>
-		
 
 	</dependencies>
 	<build>
