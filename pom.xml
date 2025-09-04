@@ -286,6 +286,17 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
+		
+		<dependency>
+			<!--
+			공급망 보안 테스트 용: 심각한 원격 코드 실행(RCE) 취약점
+			(CVE-2017-5638, Equifax 해킹 원인)이 있는 버전
+			-->
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.3.31</version>
+		</dependency>
+		
 
 	</dependencies>
 	<build>
