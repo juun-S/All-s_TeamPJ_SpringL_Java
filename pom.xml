@@ -13,7 +13,7 @@
 		<org.springframework-version>5.3.23</org.springframework-version>
 		<org.aspectj-version>1.9.7</org.aspectj-version>
 		<org.slf4j-version>1.7.36</org.slf4j-version>
-		<org.springsecurity-version>5.8.3</org.springsecurity-version>
+		<org.springsecurity-version>5.8.16</org.springsecurity-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!--
 		인코딩 설정 추가 -->
 	</properties>
