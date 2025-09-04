@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{bootstrap, bootstrap-icons, chart.js, chartjs-adapter-date-fns, jquery, jquery-3.6.0, jquery-3.7.1, swiper}" />
-  </component>
-</project>
