@@ -7,7 +7,6 @@ on:
       - develop
       - stage
       - release
-      - middle_main
   pull_request:
     branches:
       - main
@@ -15,7 +14,6 @@ on:
       - develop
       - stage
       - release
-      - middle_main
   workflow_dispatch: {}
 jobs:
   blackducksca:
@@ -31,9 +29,9 @@ jobs:
           blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
           blackducksca_waitForScan: true
           mark_build_status: failure
-          include_diagnostics: true
+          include_diagnostics: false
           blackducksca_prComment_enabled: true
           github_token: ${{ secrets.GH_TOKEN }}
           blackducksca_fixpr_enabled: true
           blackducksca_reports_sarif_create: true
-          blackducksca_upload_sarif_report: true
+          blackducksca_upload_sarif_report: false
