@@ -27,7 +27,7 @@ jobs:
           blackducksca_fixpr_enabled: true
           blackducksca_reports_sarif_create: true
           blackducksca_upload_sarif_report: true
-          detect_args: |
+          detect_args: >
             --detect.blackduck.scan.mode=RAPID
             --detect.excluded.detector.types=GIT
             --detect.project.name=AllsJenkins
