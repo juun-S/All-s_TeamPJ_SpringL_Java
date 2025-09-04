@@ -30,7 +30,7 @@ jobs:
           detect_args: |
             --detect.blackduck.scan.mode=RAPID
             --detect.excluded.detector.types=GIT
-            --detect.project.name=Allsjenkis
+            --detect.project.name=AllsJenkins
             --detect.project.version.name=No.84_Branch:middle_main
             --blackduck.trust.cert=true
             --detect.accuracy.required=NONE
