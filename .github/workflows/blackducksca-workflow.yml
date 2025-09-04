@@ -1,10 +1,21 @@
+
 name: Black Duck Security Scan
 on:
   push:
     branches:
+      - main
+      - master
+      - develop
+      - stage
+      - release
       - middle_main
   pull_request:
     branches:
+      - main
+      - master
+      - develop
+      - stage
+      - release
       - middle_main
   workflow_dispatch: {}
 jobs:
@@ -27,11 +38,3 @@ jobs:
           blackducksca_fixpr_enabled: true
           blackducksca_reports_sarif_create: true
           blackducksca_upload_sarif_report: true
-          detect_args: |
-            --detect.blackduck.scan.mode=RAPID
-            --detect.excluded.detector.types=GIT
-            --detect.project.name=AllsJenkins
-            --detect.project.version.name=No.84_Branch:middle_main
-            --blackduck.trust.cert=true
-            --detect.accuracy.required=NONE
-            --detect.timeout=5000
