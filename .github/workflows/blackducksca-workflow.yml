@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Black Duck Security Scan
         id: black-duck-security-scan
+        if: ${{ github.event_name == 'pull_request' }}
         uses: blackduck-inc/black-duck-security-scan@v2
         with:
           blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
@@ -35,5 +36,5 @@ jobs:
           blackducksca_prComment_enabled: true
           github_token: ${{ secrets.GH_TOKEN }}
           blackducksca_fixpr_enabled: true
-          blackducksca_reports_sarif_create: true
-          blackducksca_upload_sarif_report: true
+          blackducksca_reports_sarif_create: false
+          blackducksca_upload_sarif_report: false
