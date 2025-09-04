@@ -10,7 +10,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<java-version>17</java-version> <!-- JDK 17 사용 -->
-		<org.springframework-version>5.3.23</org.springframework-version>
+		<org.springframework-version>5.3.39-wso2v4</org.springframework-version>
 		<org.aspectj-version>1.9.7</org.aspectj-version>
 		<org.slf4j-version>1.7.36</org.slf4j-version>
 		<org.springsecurity-version>5.8.3</org.springsecurity-version>
