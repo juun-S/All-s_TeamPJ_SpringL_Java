@@ -27,3 +27,11 @@ jobs:
           blackducksca_fixpr_enabled: true
           blackducksca_reports_sarif_create: false
           blackducksca_upload_sarif_report: false
+          detect_args: |
+            --detect.blackduck.scan.mode=RAPID
+            --detect.excluded.detector.types=GIT
+            --detect.project.name=Webgoat
+            --detect.project.version.name=PR_Test
+            --blackduck.trust.cert=true
+            --detect.accuracy.required=NONE
+            --detect.timeout=5000
