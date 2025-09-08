@@ -35,6 +35,7 @@ jobs:
           include_diagnostics: true
           blackducksca_prComment_enabled: true
           github_token: ${{ secrets.GH_TOKEN }}
-          blackducksca_fixpr_enabled: true
+          
+          blackducksca_fixpr_enabled: false
           blackducksca_reports_sarif_create: true
           blackducksca_upload_sarif_report: true
