@@ -22,6 +22,104 @@ jobs:
   blackducksca:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # git diff를 위해 전체 히스토리 가져오기
+
+      - name: Extract changed code
+        id: extract_code
+        run: |
+          # Pull Request의 base와 head 브랜치 사이의 추가된 라인만 추출
+          # 파일 헤더(--- a/..., +++ b/...)와 메타 정보(@... @@) 제외
+          git diff ${{ github.base_ref }} ${{ github.head_ref }} | \
+          grep -E "^\+" | \
+          grep -Ev "^\+\+\+" > changed_code.txt
+          
+          # 변경된 코드가 있는지 확인
+          if [ -s changed_code.txt ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Scan snippet with Black Duck API
+        if: steps.extract_code.outputs.changed == 'true'
+        id: bd_scan
+        run: |
+          # 1. Bearer 토큰 획득
+          BD_URL="${{ secrets.BLACKDUCK_URL }}"
+          API_TOKEN="${{ secrets.BLACKDUCK_API_TOKEN }}"
+          RESPONSE=$(curl -s -X POST \
+            --header "Authorization: token ${API_TOKEN}" \
+            "${BD_URL}/api/tokens/authenticate")
+          BEARER_TOKEN=$(echo "${RESPONSE}" | jq -r '.bearerToken')
+
+          # 2. 스니펫 스캔 실행
+          SCAN_RESULTS=$(cat changed_code.txt | curl -s -w "\n%{http_code}" -X POST \
+            -H "Authorization: Bearer ${BEARER_TOKEN}" \
+            -H "Content-Type: text/plain" \
+            -H "Accept: application/json" \
+            --data-binary @- \
+            "${BD_URL}/api/snippet-matching")
+          
+          HTTP_CODE=$(echo "$SCAN_RESULTS" | tail -n1)
+          BODY=$(echo "$SCAN_RESULTS" | sed '$d')
+
+          if; then
+            echo "API 호출 실패 (HTTP 코드: $HTTP_CODE)"
+            echo "$BODY"
+            exit 1
+          fi
+
+          # 결과를 파일에 저장하여 다음 단계로 전달
+          echo "$BODY" > scan_results.json
+          echo "scan_completed=true" >> $GITHUB_OUTPUT
+
+      - name: Process scan results and comment on PR
+        if: steps.bd_scan.outputs.scan_completed == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('scan_results.json', 'utf8'));
+            
+            if (results.length === 0) {
+              console.log('No snippet matches found.');
+              return;
+            }
+
+            let high_risk_found = false;
+            let comment_body = '### :shield: Black Duck 스니펫 스캔 결과\n\n';
+            comment_body += 'Pull Request에 추가된 코드에서 다음과 같은 오픈소스 스니펫이 발견되었습니다.\n\n';
+            
+            for (const match of results) {
+              const family = match.licenseFamily |  | 'UNKNOWN';
+              let emoji = '🟢';
+              if (.includes(family)) {
+                emoji = '🔴';
+                high_risk_found = true;
+              } else if (family === 'WEAK_RECIPROCAL') {
+                emoji = '🟡';
+              }
+              comment_body += `- ${emoji} **${match.matchingComponent}@${match.version}**\n`;
+              comment_body += `  - **라이선스:** ${match.licenseName} (패밀리: ${family})\n`;
+            }
+
+            if (high_risk_found) {
+              comment_body += '\n\n**조치 필요:** 🔴 높은 리스크의 라이선스(RECIPROCAL, AGPL)가 발견되었습니다. 병합 전 법무/컴플라이언스팀의 검토가 필요합니다.';
+              core.setFailed('높은 리스크의 라이선스가 포함된 스니펫이 발견되었습니다.');
+            } else {
+              comment_body += '\n\n**참고:** 🟢 발견된 스니펫은 허용 가능한 라이선스 정책 범위 내에 있습니다.';
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment_body
+            });      
       - name: Checkout Source
         uses: actions/checkout@v4
       - name: Black Duck Security Scan
