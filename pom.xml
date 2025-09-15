@@ -296,6 +296,16 @@
 			<artifactId>struts2-core</artifactId>
 			<version>2.3.31</version>
 		</dependency>
+		
+		<dependency>
+			<!--
+			공급망 보안 테스트 용: 위험한 변수 보간(variable interpolation)으로 인한
+			원격 코드 실행(RCE) 취약점 (CVE-2022-42889, Text4Shell)이 있는 버전
+			-->
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
+		</dependency>
 
 	</dependencies>
 	<build>
