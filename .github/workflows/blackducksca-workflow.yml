@@ -9,6 +9,7 @@ on:
       - stage
       - release
       - middle_main
+      - forBlackDuckSCAWorkflow
   pull_request:
     branches:
       - main
@@ -17,6 +18,7 @@ on:
       - stage
       - release
       - middle_main
+      - forBlackDuckSCAWorkflow
   workflow_dispatch: {}
 jobs:
   blackducksca:
@@ -48,8 +50,8 @@ jobs:
         id: bd_scan
         run: |
           # 1. Bearer 토큰 획득
-          BD_URL="${{ secrets.BLACKDUCK_URL }}"
-          API_TOKEN="${{ secrets.BLACKDUCK_API_TOKEN }}"
+          BD_URL="${{ vars.BLACKDUCKSCA_URL }}"
+          API_TOKEN="${{ secrets.BLACKDUCKSCA_TOKEN }}"
           RESPONSE=$(curl -s -X POST \
             --header "Authorization: token ${API_TOKEN}" \
             "${BD_URL}/api/tokens/authenticate")
