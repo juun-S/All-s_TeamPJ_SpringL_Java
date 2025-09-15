@@ -36,8 +36,7 @@ jobs:
           # ${{ github.base_ref }} 와 ${{ github.head_ref }} 를 명시적으로 추가
           git diff ${{ github.base_ref }} ${{ github.head_ref }} | \
           grep -E "^\+" | \
-          grep -Ev "^\+\+\+" > changed_code.txt |
-          | true
+          grep -Ev "^\+\+\+" > changed_code.txt || true
           
           # 변경된 코드가 있는지 확인
           if [ -s changed_code.txt ]; then
