@@ -111,4 +111,34 @@ public class TestBlackDuckSnippetAPI {
             return object;
         }
     }
+
+    /**
+     * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 ConstantTransformer 일부
+     * 이 코드는 역직렬화 취약점(CVE-2015-7450) 공격 체인에서 특정 상수를 반환하는 데 사용될 수 있습니다.
+     * 스니펫 스캔 API의 최소 글자 수(300자) 요구사항을 만족시키기 위해 추가되었습니다.
+     */
+    public static class ConstantTransformer implements Transformer, Serializable {
+        private static final long serialVersionUID = 6374440726369055124L;
+        private final Object iConstant;
+
+        public ConstantTransformer(Object constantToReturn) {
+            super();
+            iConstant = constantToReturn;
+        }
+
+        public Object transform(Object input) {
+            return iConstant;
+        }
+    }
+
+    /**
+     * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 NOPTransformer 일부
+     * 이 코드는 아무 작업도 하지 않고 입력을 그대로 반환하며, 다른 Transformer와 조합하여 사용될 수 있습니다.
+     * 스니펫 스캔 API의 최소 글자 수(300자) 요구사항을 만족시키기 위해 추가되었습니다.
+     */
+    public static class NOPTransformer implements Transformer, Serializable {
+        private static final long serialVersionUID = 2133891748318574490L;
+
+        public Object transform(Object input) { return input; }
+    }
 }
