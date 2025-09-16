@@ -51,9 +51,12 @@ jobs:
           fi
 
       - name: Scan snippet with Black Duck API
-        if: steps.extract_code.outputs.changed == 'true'
+        if: steps.extract_code.outputs.changed == 'true' && vars.BLACKDUCKSCA_URL && secrets.BLACKDUCKSCA_TOKEN
         id: bd_scan
         run: |
+          # jq 설치 (러너에 포함되어 있지만 명시적으로 설치)
+          sudo apt-get update && sudo apt-get install -y jq
+
           # 1. Bearer 토큰 획득
           BD_URL="${{ vars.BLACKDUCKSCA_URL }}"
           API_TOKEN="${{ secrets.BLACKDUCKSCA_TOKEN }}"
