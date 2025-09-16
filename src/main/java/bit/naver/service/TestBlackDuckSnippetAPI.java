@@ -89,4 +89,26 @@ public class TestBlackDuckSnippetAPI {
             return super.map.get(key);
         }
     }
+
+    /**
+     * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 ChainedTransformer 일부
+     * 이 코드는 여러 Transformer를 연결하여 순차적으로 실행하며, 역직렬화 취약점(CVE-2015-7450) 공격에 사용될 수 있습니다.
+     * 스니펫 스캔 API의 최소 글자 수(300자) 요구사항을 만족시키기 위해 추가되었습니다.
+     */
+    public static class ChainedTransformer implements Transformer, Serializable {
+        private static final long serialVersionUID = 351494127533709113L;
+        private final Transformer[] iTransformers;
+
+        public ChainedTransformer(Transformer[] transformers) {
+            super();
+            iTransformers = transformers;
+        }
+
+        public Object transform(Object object) {
+            for (int i = 0; i < iTransformers.length; i++) {
+                object = iTransformers[i].transform(object);
+            }
+            return object;
+        }
+    }
 }

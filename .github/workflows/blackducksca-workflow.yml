@@ -93,7 +93,8 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
             const fs = require('fs');
-            const results = JSON.parse(fs.readFileSync('scan_results.json', 'utf8'));
+            const response = JSON.parse(fs.readFileSync('scan_results.json', 'utf8'));
+            const results = response.items || []; // API 응답의 items 배열을 사용합니다.
             
             if (results.length === 0) {
               console.log('No snippet matches found.');
