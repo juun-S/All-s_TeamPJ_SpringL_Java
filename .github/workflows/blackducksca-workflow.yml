@@ -37,7 +37,7 @@ jobs:
             git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
           else
             # Push: 이전 커밋과 현재 커밋 사이의 변경분 추출
-            git diff ${{ github.event.before }} ${{ github.sha }}
+            git diff ${{ github.event.before }} ${{ github.sha }} --
           fi | \
           grep -E "^\+" | \
           # --- a/file, +++ b/file 같은 diff 헤더 라인 제외
@@ -45,6 +45,9 @@ jobs:
           
           # 변경된 코드가 있는지 확인
           if [ -s changed_code.txt ]; then
+            echo "--- 스캔될 코드 스니펫 ---"
+            cat changed_code.txt
+            echo "--------------------------"
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
