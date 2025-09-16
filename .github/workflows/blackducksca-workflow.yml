@@ -51,7 +51,7 @@ jobs:
           fi
 
       - name: Scan snippet with Black Duck API
-        if: steps.extract_code.outputs.changed == 'true' && vars.BLACKDUCKSCA_URL && secrets.BLACKDUCKSCA_TOKEN
+        if: steps.extract_code.outputs.changed == 'true'
         id: bd_scan
         run: |
           # jq 설치 (러너에 포함되어 있지만 명시적으로 설치)
