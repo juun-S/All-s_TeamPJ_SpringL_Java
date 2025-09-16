@@ -34,10 +34,10 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             # Pull Request: base와 head 브랜치 사이의 변경분 추출
-            git diff ${{ github.base_ref }} ${{ github.head_ref }}
+            git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
           else
             # Push: 이전 커밋과 현재 커밋 사이의 변경분 추출
-            git diff HEAD~1 HEAD
+            git diff ${{ github.event.before }} ${{ github.sha }}
           fi | \
           grep -E "^\+" | \
           # --- a/file, +++ b/file 같은 diff 헤더 라인 제외
