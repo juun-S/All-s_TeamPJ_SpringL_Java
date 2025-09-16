@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class TestBlackDuckSnippetAPI {
+    // CVE-2015-7450
 
     /**
      * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 InvokerTransformer 일부
@@ -37,6 +38,55 @@ public class TestBlackDuckSnippetAPI {
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 throw new RuntimeException("InvokerTransformer: The method '" + iMethodName + "' on '" + input.getClass() + "' cannot be invoked", ex);
             }
+        }
+    }
+
+    /**
+     * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 LazyMap 일부
+     * 이 코드는 InvokerTransformer와 함께 사용되어 원격 코드 실행(RCE) 취약점(CVE-2015-7450)을 유발할 수 있습니다.
+     * 스니펫 스캔 API의 최소 글자 수(300자) 요구사항을 만족시키기 위해 추가되었습니다.
+     */
+    public static abstract class AbstractMapDecorator implements java.util.Map, Serializable {
+        private static final long serialVersionUID = -256220736379L;
+        protected java.util.Map map;
+
+        public AbstractMapDecorator(java.util.Map map) {
+            if (map == null) {
+                throw new IllegalArgumentException("Map must not be null.");
+            }
+            this.map = map;
+        }
+
+        public java.util.Collection values() {
+            return this.map.values();
+        }
+    }
+
+    public interface Transformer {
+        Object transform(Object input);
+    }
+
+    public static class LazyMap extends AbstractMapDecorator {
+        private static final long serialVersionUID = 7990956402564206760L;
+        protected final Transformer factory;
+
+        public static java.util.Map decorate(java.util.Map map, Transformer factory) {
+            return new LazyMap(map, factory);
+        }
+
+        protected LazyMap(java.util.Map map, Transformer factory) {
+            super(map);
+            if (factory == null) {
+                throw new IllegalArgumentException("Factory must not be null");
+            }
+            this.factory = factory;
+        }
+
+        public Object get(Object key) {
+            if (!super.map.containsKey(key)) {
+                super.map.put(key, this.factory.transform(key));
+            }
+            return super.map.get(key);
         }
     }
 }
