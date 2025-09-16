@@ -141,4 +141,29 @@ public class TestBlackDuckSnippetAPI {
 
         public Object transform(Object input) { return input; }
     }
+
+    /**
+     * 공급망 보안 테스트 용: Apache Commons Collections 3.2.1의 InstantiateTransformer 일부
+     * 이 코드는 특정 클래스의 인스턴스를 생성하며, 역직렬화 취약점(CVE-2015-7450) 공격 체인에서 사용될 수 있습니다.
+     * 스니펫 스캔 API의 최소 글자 수(300자) 요구사항을 만족시키기 위해 추가되었습니다.
+     */
+    public static class InstantiateTransformer implements Transformer, Serializable {
+        private static final long serialVersionUID = 3786388740793356347L;
+        private final Class[] iParamTypes;
+        private final Object[] iArgs;
+
+        public InstantiateTransformer(Class[] paramTypes, Object[] args) {
+            super();
+            iParamTypes = paramTypes;
+            iArgs = args;
+        }
+
+        public Object transform(Object input) {
+            try {
+                return ((Class) input).getConstructor(iParamTypes).newInstance(iArgs);
+            } catch (Exception ex) {
+                throw new RuntimeException("InstantiateTransformer: Failed to instantiate object", ex);
+            }
+        }
+    }
 }
