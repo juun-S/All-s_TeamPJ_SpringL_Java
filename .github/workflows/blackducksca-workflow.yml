@@ -32,10 +32,15 @@ jobs:
       - name: Extract changed code
         id: extract_code
         run: |
-          # Pull Request의 base와 head 브랜치 사이의 추가된 라인만 추출
-          # ${{ github.base_ref }} 와 ${{ github.head_ref }} 를 명시적으로 추가
-          git diff ${{ github.base_ref }} ${{ github.head_ref }} | \
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            # Pull Request: base와 head 브랜치 사이의 변경분 추출
+            git diff ${{ github.base_ref }} ${{ github.head_ref }}
+          else
+            # Push: 이전 커밋과 현재 커밋 사이의 변경분 추출
+            git diff HEAD~1 HEAD
+          fi | \
           grep -E "^\+" | \
+          # --- a/file, +++ b/file 같은 diff 헤더 라인 제외
           grep -Ev "^\+\+\+" > changed_code.txt || true
           
           # 변경된 코드가 있는지 확인
@@ -68,7 +73,7 @@ jobs:
           HTTP_CODE=$(echo "$SCAN_RESULTS" | tail -n1)
           BODY=$(echo "$SCAN_RESULTS" | sed '$d')
 
-          if; then
+          if [ "$HTTP_CODE" -ne 200 ]; then
             echo "API 호출 실패 (HTTP 코드: $HTTP_CODE)"
             echo "$BODY"
             exit 1
@@ -80,7 +85,7 @@ jobs:
 
       - name: Process scan results and comment on PR
         if: steps.bd_scan.outputs.scan_completed == 'true'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
@@ -95,11 +100,11 @@ jobs:
             let high_risk_found = false;
             let comment_body = '### :shield: Black Duck 스니펫 스캔 결과\n\n';
             comment_body += 'Pull Request에 추가된 코드에서 다음과 같은 오픈소스 스니펫이 발견되었습니다.\n\n';
-            
+            const highRiskFamilies = ['RECIPROCAL', 'AGPL'];
             for (const match of results) {
-              const family = match.licenseFamily |  | 'UNKNOWN';
+              const family = match.licenseFamily || 'UNKNOWN';
               let emoji = '🟢';
-              if (.includes(family)) {
+              if (highRiskFamilies.includes(family)) {
                 emoji = '🔴';
                 high_risk_found = true;
               } else if (family === 'WEAK_RECIPROCAL') {
@@ -116,12 +121,14 @@ jobs:
               comment_body += '\n\n**참고:** 🟢 발견된 스니펫은 허용 가능한 라이선스 정책 범위 내에 있습니다.';
             }
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: comment_body
-            });      
+            if (context.eventName === 'pull_request') {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment_body
+              });
+            }
       - name: Checkout Source
         uses: actions/checkout@v4
       - name: Black Duck Security Scan
