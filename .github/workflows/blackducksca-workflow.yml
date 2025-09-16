@@ -62,7 +62,7 @@ jobs:
           API_TOKEN="${{ secrets.BLACKDUCKSCA_TOKEN }}"
           RESPONSE=$(curl -s -X POST \
             --header "Authorization: token ${API_TOKEN}" \
-            "${BD_URL}/api/tokens/authenticate")
+            "${BD_URL}api/tokens/authenticate")
           BEARER_TOKEN=$(echo "${RESPONSE}" | jq -r '.bearerToken')
 
           # 2. 스니펫 스캔 실행
