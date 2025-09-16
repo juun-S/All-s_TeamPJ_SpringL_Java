@@ -68,7 +68,7 @@ jobs:
             -H "Content-Type: text/plain" \
             -H "Accept: application/json" \
             --data-binary @- \
-            "${BD_URL}/api/snippet-matching")
+            "${BD_URL}api/snippet-matching")
           
           HTTP_CODE=$(echo "$SCAN_RESULTS" | tail -n1)
           BODY=$(echo "$SCAN_RESULTS" | sed '$d')
